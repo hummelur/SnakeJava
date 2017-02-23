@@ -52,6 +52,15 @@ public class Player implements GameObjects {
         return "Player";
     }
 
+    public Tail[] getTailArray(){
+        return tailArray;
+    }
+
+    public void resetTailArray(){
+        tailTotal = 0;
+        tailArray = new Tail[0];
+    }
+
     public void eatFood(){
        addTail();
     }

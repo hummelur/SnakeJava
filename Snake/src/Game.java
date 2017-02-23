@@ -14,19 +14,25 @@ public class Game extends Canvas implements Runnable{
     private PlayerHandler ph;
     private boolean running = false;
 
+    // GameLoop variables
+    double interpolation = 0;
+    final int TICKS_PER_SECOND = 60;
+    final int SKIP_TICKS = 1000/TICKS_PER_SECOND;
+    final int MAX_FRAMESKIP = 5;
+
     public static void main(String[] args){
         Thread t1 = new Thread(new Game());
         t1.start();
     }
 
     public Game(){
-        window = new Window(600, 600, "Snacke", this);
+        window = new Window(965, 988, "Snacke", this);
     }
 
     public void start(){
         thread = new Thread(this);
         thread.start();
-        board = new Board(0, 0, 600, 600);
+        board = new Board(0, 0, 960, 960);
         ph = new PlayerHandler(board, this);
         running = true;
     }
@@ -43,20 +49,25 @@ public class Game extends Canvas implements Runnable{
 
     @Override
     public void run() {
+        double next_game_tick = System.currentTimeMillis();
+        int loops;
+
         while(running){
-            render();
-            try {
-                Thread.sleep(30);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            loops = 0;
+            while(System.currentTimeMillis() > next_game_tick && loops < MAX_FRAMESKIP){
+                // Render and update
+
+                render();
+
+                next_game_tick += SKIP_TICKS;
+                loops++;
             }
+            interpolation = (System.currentTimeMillis() + SKIP_TICKS - next_game_tick / (double)SKIP_TICKS);
         }
         stop();
     }
 
     public void render(){
-        // Update the player
-        ph.update();
         // inits and gets the bufferstrategy
         BufferStrategy bs = this.getBufferStrategy();
         if(bs == null){
@@ -66,7 +77,11 @@ public class Game extends Canvas implements Runnable{
 
         Graphics g = bs.getDrawGraphics();
 
+        g.setColor(Color.WHITE);
+        g.fillRect(0,0, getWidth(), getHeight());
+
         board.render(g);
+        ph.update();
 
         g.dispose();
         bs.show();

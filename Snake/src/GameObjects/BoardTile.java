@@ -54,8 +54,6 @@ public class BoardTile implements GameObjects{
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.drawRect(posx * SCALE, posy * SCALE, WIDTH, HEIGHT);
     }
 }
 

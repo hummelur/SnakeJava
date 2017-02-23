@@ -1,4 +1,4 @@
-import GameObjects.GameObjects;
+import GameObjects.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -18,12 +18,12 @@ public class PlayerHandler implements KeyListener{
         Right
     };
     private int tickPast = 0;
-    private int maxTick = 10;
+    private int maxTick = 14;
 
     private Dir CurrentDir = Dir.Right;
     private Player player;
     private Game game;
-
+    private boolean alive = true;
 
     public PlayerHandler(Board board, Game game){
         this.game = game;
@@ -41,7 +41,6 @@ public class PlayerHandler implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
 
-        System.out.println(e.getKeyChar());
         if(e.getKeyCode() == KeyEvent.VK_DOWN){
             CurrentDir = Dir.Down;
         } else if(e.getKeyCode() == KeyEvent.VK_UP){
@@ -66,10 +65,13 @@ public class PlayerHandler implements KeyListener{
             tickPast = 0;
             player.update();
             setSquare(CurrentDir);
+            // Checks if the player pos should be on the other side of the screen when hitting the wall
+            screenWrap();
+            // Checks if the player collides with the tail
+            if(tailCollisionCheck()){
+                alive = false;
+            }
         }
-
-        System.out.println(tickPast);
-
     }
 
     public void setSquare(Dir dir){
@@ -81,6 +83,31 @@ public class PlayerHandler implements KeyListener{
             player.setX(player.getX() + 1);
         } else {
             player.setX(player.getX() - 1);
+        }
+    }
+
+    public boolean tailCollisionCheck(){
+        if(player.getTailArray().length > 0){
+            for (Tail tail : player.getTailArray()){
+                System.out.println(tail.getX());
+                if(tail.getX() == player.getX() && tail.getY() == player.getY()){
+                    player.resetTailArray();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void screenWrap(){
+        if(player.getX() > 15){
+            player.setX(0);
+        } else if(player.getY() > 15){
+            player.setY(0);
+        } else if(player.getX() < 0){
+            player.setX(16);
+        } else if(player.getY() < 0){
+            player.setY(16);
         }
     }
 }

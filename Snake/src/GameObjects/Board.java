@@ -19,6 +19,7 @@ public class Board implements GameObjects{
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         int SCALE = WIDTH / 16;
+        System.out.println(WIDTH);
         // Adds the tiles of the map
         for(int y = 0; y < 16; y++){
             for(int x = 0; x < 16; x++){
@@ -72,11 +73,6 @@ public class Board implements GameObjects{
     public void render(Graphics g) {
         g.setColor(Color.GRAY);
         g.fillRect(posx, posy, WIDTH, HEIGHT);
-
-        // REnder the tiles
-        for(GameObjects obj : boardTiles){
-            obj.render(g);
-        }
 
         player.render(g);
     }
