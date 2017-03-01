@@ -2,6 +2,8 @@ import GameObjects.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
+
 import GameObjects.Board;
 import GameObjects.Player;
 
@@ -23,11 +25,14 @@ public class PlayerHandler implements KeyListener{
     private Dir CurrentDir = Dir.Right;
     private Player player;
     private Game game;
+    public static GameObjects food;
     private boolean alive = true;
+    private Random rnd = new Random();
 
     public PlayerHandler(Board board, Game game){
         this.game = game;
         this.player = board.getPlayer();
+        this.food = new Food((rnd.nextInt(16)), (rnd.nextInt(16)), player.getHeight());
         player.setX(0);
         player.setY(0);
         game.addKeyListener(this);
@@ -41,13 +46,13 @@ public class PlayerHandler implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
 
-        if(e.getKeyCode() == KeyEvent.VK_DOWN){
+        if(e.getKeyCode() == KeyEvent.VK_DOWN && CurrentDir != Dir.Up){
             CurrentDir = Dir.Down;
-        } else if(e.getKeyCode() == KeyEvent.VK_UP){
+        } else if(e.getKeyCode() == KeyEvent.VK_UP && CurrentDir != Dir.Down){
             CurrentDir = Dir.Up;
-        } else if(e.getKeyCode() == KeyEvent.VK_LEFT){
+        } else if(e.getKeyCode() == KeyEvent.VK_LEFT && CurrentDir != Dir.Right){
             CurrentDir = Dir.Left;
-        } else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+        } else if(e.getKeyCode() == KeyEvent.VK_RIGHT && CurrentDir != Dir.Left){
             CurrentDir = Dir.Right;
         } else if(e.getKeyCode() == KeyEvent.VK_E){
             player.eatFood();
@@ -61,6 +66,7 @@ public class PlayerHandler implements KeyListener{
 
     public void update(){
         tickPast++;
+        FoodCollision();
         if(maxTick <= tickPast){
             tickPast = 0;
             player.update();
@@ -109,6 +115,19 @@ public class PlayerHandler implements KeyListener{
         } else if(player.getY() < 0){
             player.setY(16);
         }
+    }
+
+    private void FoodCollision(){
+        if(player.getX() == food.getX() && player.getY() == food.getY()){
+            setRandomFood();
+            player.eatFood();
+        }
+    }
+
+    public void setRandomFood(){
+        // Sets a random value between 0 and 20
+        food.setX((rnd.nextInt(16)));
+        food.setY((rnd.nextInt(16)));
     }
 }
 

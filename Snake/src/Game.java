@@ -1,4 +1,5 @@
 import GameObjects.Board;
+import GameObjects.GameObjects;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -12,6 +13,7 @@ public class Game extends Canvas implements Runnable{
     private Thread thread;
     private Board board;
     private PlayerHandler ph;
+    public static GameObjects food;
     private boolean running = false;
 
     // GameLoop variables
@@ -44,8 +46,8 @@ public class Game extends Canvas implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
+
 
     @Override
     public void run() {
@@ -82,6 +84,7 @@ public class Game extends Canvas implements Runnable{
 
         board.render(g);
         ph.update();
+        ph.food.render(g);
 
         g.dispose();
         bs.show();
