@@ -111,9 +111,9 @@ public class PlayerHandler implements KeyListener{
         } else if(player.getY() > 15){
             player.setY(0);
         } else if(player.getX() < 0){
-            player.setX(16);
+            player.setX(15);
         } else if(player.getY() < 0){
-            player.setY(16);
+            player.setY(15);
         }
     }
 

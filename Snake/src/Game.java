@@ -4,6 +4,8 @@ import GameObjects.GameObjects;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
+import static java.awt.Toolkit.*;
+
 /**
  * Created by filipolsen on 2017-02-20.
  */
@@ -16,11 +18,18 @@ public class Game extends Canvas implements Runnable{
     public static GameObjects food;
     private boolean running = false;
 
+    // HEIGHT AND WIDTH OF GAME
+    private int WIDTH = 640, HEIGHT = 640;
+
     // GameLoop variables
     double interpolation = 0;
     final int TICKS_PER_SECOND = 60;
     final int SKIP_TICKS = 1000/TICKS_PER_SECOND;
     final int MAX_FRAMESKIP = 5;
+
+    //height of the task bar
+    private Insets scnMax;
+    private int taskBarSize;
 
     public static void main(String[] args){
         Thread t1 = new Thread(new Game());
@@ -28,13 +37,16 @@ public class Game extends Canvas implements Runnable{
     }
 
     public Game(){
-        window = new Window(965, 988, "Snacke", this);
+
+        // Sets the window width and tile size of the window (Height is assigned an extra tile minus the offset of the bar on top)
+        window = new Window(WIDTH, HEIGHT, "Snacke", this);
+        System.out.println(HEIGHT + HEIGHT / 16 + "HEIGHT: " + HEIGHT);
     }
 
     public void start(){
         thread = new Thread(this);
         thread.start();
-        board = new Board(0, 0, 960, 960);
+        board = new Board(0, 0, WIDTH, HEIGHT);
         ph = new PlayerHandler(board, this);
         running = true;
     }

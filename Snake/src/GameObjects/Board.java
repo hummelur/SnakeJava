@@ -18,15 +18,17 @@ public class Board implements GameObjects{
         this.posy = posy;
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
-        int SCALE = WIDTH / 16;
-        System.out.println(WIDTH);
+        int SCALE_WIDTH = WIDTH / 16;
+        int SCALE_HEIGHT = HEIGHT / 16;
+        System.out.println(SCALE_WIDTH + " " + SCALE_HEIGHT);
+
         // Adds the tiles of the map
         for(int y = 0; y < 16; y++){
             for(int x = 0; x < 16; x++){
                 if(x == 10 && y == 10){
                     player = new Player(boardTiles.get(8));
                 }
-                boardTiles.add(new BoardTile(x, y, SCALE, SCALE, SCALE));
+                boardTiles.add(new BoardTile(x, y, SCALE_WIDTH, SCALE_WIDTH, SCALE_WIDTH));
             }
         }
     }

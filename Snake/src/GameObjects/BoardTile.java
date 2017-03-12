@@ -8,13 +8,11 @@ import java.awt.*;
 public class BoardTile implements GameObjects{
     private int posx, posy, WIDTH, HEIGHT, SCALE;
     public BoardTile(int posx, int posy, int WIDTH, int HEIGHT, int SCALE){
-
         this.posx = posx;
         this.posy = posy;
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
         this.SCALE = SCALE;
-
     }
 
     @Override
